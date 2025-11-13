@@ -36,7 +36,7 @@ class AduanController extends Controller
                 return [
                     'id_item'   => $item->id_item,
                     'nama_item' => $item->nama_item,
-                    'lokasi'    => $item->lokasis->pluck('nama_lokasi')->implode(', ')
+                    'lokasi'    => $item->lokasiList->pluck('nama_lokasi')->implode(', ')
                 ];
             });
 
