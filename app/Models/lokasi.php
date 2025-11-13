@@ -2,33 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Lokasi extends Model
 {
-    use HasFactory;
+    // adjust table/primaryKey if your DB uses different names
+    protected $table = 'lokasis';
+    // protected $primaryKey = 'id_lokasi';
 
-    protected $table = 'lokasi';
-    protected $primaryKey = 'id_lokasi';
+    // allow mass assignment for nama_lokasi (add others if needed)
+    protected $fillable = ['nama_lokasi'];
 
-    protected $fillable = [
-        'nama_lokasi'
-    ];
+    // if your table doesn't have timestamps, uncomment:
+    // public $timestamps = false;
 
-    /**
- * Relasi many-to-many ke model Item.
- *
- * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
- */
-
+    // example relation (optional) — adjust relation name and pivot/table if different
     public function items()
     {
-        return $this->belongsToMany(Item::class, 'list_lokasi', 'id_lokasi', 'id_item');
-    }
-
-    public function listLokasi()
-    {
-        return $this->hasMany(ListLokasi::class, 'id_lokasi', 'id_lokasi');
+        return $this->belongsToMany(Item::class, 'item_lokasi', 'id_lokasi', 'id_item');
     }
 }
