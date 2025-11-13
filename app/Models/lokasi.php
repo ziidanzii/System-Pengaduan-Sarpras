@@ -16,6 +16,12 @@ class Lokasi extends Model
         'nama_lokasi'
     ];
 
+    /**
+ * Relasi many-to-many ke model Item.
+ *
+ * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+ */
+
     public function items()
     {
         return $this->belongsToMany(Item::class, 'list_lokasi', 'id_lokasi', 'id_item');

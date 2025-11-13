@@ -44,15 +44,22 @@ class LokasiController extends Controller
                          ->with('success', 'Lokasi berhasil ditambahkan');
     }
 
-    /**
+     /**
      * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\View\View
+     *
+     * @var \App\Models\Lokasi $lokasi
+     * @var \Illuminate\Database\Eloquent\Collection|\App\Models\Item[] $lokasi->items
      */
     public function show($id)
     {
         $lokasi = Lokasi::with('items')->findOrFail($id);
         $items = Item::all();
-        $itemsInLocation = $lokasi->items->pluck('id_item')->toArray();
-        $lokasi->items_count = $lokasi->items->count();
+        // Tambahkan prefix tabel untuk menghindari ambiguitas kolom pada JOIN
+        $itemsInLocation = $lokasi->items()->pluck('items.id_item')->toArray();
+        $lokasi->items_count = $lokasi->items()->count();
 
         return view('admin.manajemen_lokasi.show', compact('lokasi', 'items', 'itemsInLocation'));
     }
