@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Lokasi extends Model
 {
     // adjust table/primaryKey if your DB uses different names
-    protected $table = 'lokasis';
+    protected $table = 'lokasi';
     // protected $primaryKey = 'id_lokasi';
 
     // allow mass assignment for nama_lokasi (add others if needed)
