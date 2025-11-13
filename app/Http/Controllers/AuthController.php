@@ -55,7 +55,20 @@ class AuthController extends Controller
                     ->where($field, $request->login)
                     ->first();
 
-        if ($user && Hash::check($request->password, $user->password)) {
+        // Wrap Hash::check in a try/catch to handle cases where the stored
+        // password does not use the expected hashing algorithm (e.g. not
+        // a bcrypt hash). Without this, Laravel's BcryptHasher throws a
+        // RuntimeException and results in a 500 error.
+        try {
+            $passwordMatches = $user && Hash::check($request->password, $user->password);
+        } catch (\RuntimeException $e) {
+            // Return a friendly error explaining the problem and actions to take.
+            return back()->withErrors([
+                'login' => 'Stored password for this account uses an unsupported hashing algorithm. Please reset the user password or re-hash it to match your app hashing configuration.',
+            ])->withInput($request->only('login'));
+        }
+
+        if ($passwordMatches) {
             // Handle remember me functionality
             $remember = $request->has('remember');
             Auth::login($user, $remember);
