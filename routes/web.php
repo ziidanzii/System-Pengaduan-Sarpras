@@ -65,7 +65,7 @@ Route::middleware(['auth', 'redirect.role:admin,administrator'])
         Route::resource('petugas', PetugasController::class);
 
         // Lokasi detail dan item management
-        Route::get('lokasi/{lokasi}/detail', [LokasiController::class, 'show'])->name('lokasi.show');
+        Route::get('lokasi/{lokasi}/detail', [LokasiController::class, 'show'])->name('lokasi.detail');
         Route::post('lokasi/{lokasi}/add-item', [LokasiController::class, 'addItem'])->name('lokasi.add-item');
         Route::delete('lokasi/{lokasi}/remove-item/{idItem}', [LokasiController::class, 'removeItem'])->name('lokasi.remove-item');
     });
