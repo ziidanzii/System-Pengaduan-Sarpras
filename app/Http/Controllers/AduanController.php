@@ -27,8 +27,9 @@ class AduanController extends Controller
             return response()->json([]);
         }
 
-        $items = Item::with('lokasis')
-            ->whereHas('lokasis', function($query) use ($namaLokasi) {
+        // gunakan relasi `lokasi` yang didefinisikan di model Item
+        $items = Item::with('lokasi')
+            ->whereHas('lokasi', function($query) use ($namaLokasi) {
                 $query->where('nama_lokasi', $namaLokasi);
             })
             ->get()
@@ -36,7 +37,7 @@ class AduanController extends Controller
                 return [
                     'id_item'   => $item->id_item,
                     'nama_item' => $item->nama_item,
-                    'lokasi'    => $item->lokasiList->pluck('nama_lokasi')->implode(', ')
+                    'lokasi'    => $item->lokasi->pluck('nama_lokasi')->implode(', ')
                 ];
             });
 
