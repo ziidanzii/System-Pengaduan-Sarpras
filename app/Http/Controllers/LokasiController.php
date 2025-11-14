@@ -33,8 +33,9 @@ class LokasiController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_lokasi' => 'required|string|max:200|unique:lokasi,nama_lokasi',
-        ]);
+         'nama_lokasi' => 'required|string|max:200|unique:lokasis,nama_lokasi,' . $lokasi->id_lokasi . ',id_lokasi',
+     ]);
+
 
         Lokasi::create([
             'nama_lokasi' => $request->nama_lokasi,
