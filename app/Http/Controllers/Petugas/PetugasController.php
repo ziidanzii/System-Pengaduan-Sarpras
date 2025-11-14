@@ -28,12 +28,12 @@ class PetugasController extends Controller
     public function storeComplete(Request $request)
     {
         $request->validate([
-            'username' => 'required|unique:users,username',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed',
             'nama' => 'required|string|max:200',
             'gender' => 'required|in:P,L',
             'telp' => 'required|string|max:30',
+            'username' => 'required|unique:users,username',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6|confirmed',
         ]);
 
         DB::transaction(function() use ($request) {
