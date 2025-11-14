@@ -18,10 +18,24 @@ class PetugasController extends Controller
         return view('admin.manajemen_petugas.index', compact('petugas'));
     }
 
-    // Form tambah petugas (langsung input user + petugas)
+    // Method create untuk route resource
+    public function create()
+    {
+        // Panggil createComplete
+        return $this->createComplete();
+    }
+
+    // Form tambah petugas + user
     public function createComplete()
     {
         return view('admin.manajemen_petugas.create-complete');
+    }
+
+    // Method store untuk route resource
+    public function store(Request $request)
+    {
+        // Panggil storeComplete
+        return $this->storeComplete($request);
     }
 
     // Simpan petugas + user baru
@@ -66,7 +80,7 @@ class PetugasController extends Controller
         return view('admin.manajemen_petugas.edit', compact('petugas'));
     }
 
-    // Update petugas + user terkait
+    // Update petugas + user
     public function update(Request $request, $id)
     {
         $petugas = Petugas::with('user')->findOrFail($id);
@@ -102,13 +116,11 @@ class PetugasController extends Controller
                          ->with('success', 'Petugas berhasil diperbarui!');
     }
 
-    // Hapus petugas + user terkait
+    // Hapus petugas + user
     public function destroy(Petugas $petugas)
     {
         DB::transaction(function() use ($petugas) {
-            // Hapus user terkait
             $petugas->user()->delete();
-            // Hapus petugas
             $petugas->delete();
         });
 
