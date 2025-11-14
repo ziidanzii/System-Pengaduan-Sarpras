@@ -7,14 +7,9 @@ use Illuminate\Foundation\Http\Kernel as HttpKernel;
 class Kernel extends HttpKernel
 {
     /**
-     * The application's global HTTP middleware stack.
-     *
-     * These middleware are run during every request to your application.
-     *
-     * @var array<int, class-string|string>
+     * Global Middleware
      */
     protected $middleware = [
-        // \App\Http\Middleware\TrustHosts::class,
         \App\Http\Middleware\TrustProxies::class,
         \Illuminate\Http\Middleware\HandleCors::class,
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
@@ -24,9 +19,7 @@ class Kernel extends HttpKernel
     ];
 
     /**
-     * The application's route middleware groups.
-     *
-     * @var array<string, array<int, class-string|string>>
+     * Middleware groups
      */
     protected $middlewareGroups = [
         'web' => [
@@ -38,21 +31,17 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
-        
-'api' => [
-    \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-    'throttle:api',
-    \Illuminate\Routing\Middleware\SubstituteBindings::class,
-],
-
+        'api' => [
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            'throttle:api',
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ],
     ];
 
     /**
-     * The application's middleware aliases.
-     *
-     * Aliases may be used instead of class names to conveniently assign middleware to routes and groups.
-     *
-     * @var array<string, class-string|string>
+     * Route Middleware (aliases)
+     * — tidak boleh duplikat
+     * — hanya yang penting saja
      */
     protected $middlewareAliases = [
         'auth'             => \App\Http\Middleware\Authenticate::class,
@@ -67,20 +56,8 @@ class Kernel extends HttpKernel
         'throttle'         => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified'         => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
-        // Custom Middleware
-        'isAdmin'          => \App\Http\Middleware\IsAdmin::class,
-        'petugas'          => \App\Http\Middleware\PetugasMiddleware::class,
+        // Custom Middleware Final
+        'redirect.role'    => \App\Http\Middleware\RedirectIfRoleMismatch::class,
+        'role'             => \App\Http\Middleware\CheckRole::class,
     ];
-
-protected $routeMiddleware = [
-    'auth' => \App\Http\Middleware\Authenticate::class,
-    'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-    'isAdmin' => \App\Http\Middleware\IsAdmin::class,
-    'petugas' => \App\Http\Middleware\PetugasMiddleware::class,
-    'role' => \App\Http\Middleware\CheckRole::class,
-    'redirect.role' => \App\Http\Middleware\RedirectIfRoleMismatch::class,
-];
-
-
-
 }
