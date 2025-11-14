@@ -40,7 +40,7 @@ class Item extends Model
      */
     public function scopeByLokasi($query, $namaLokasi)
     {
-        return $query->whereHas('lokasi', function($q) use ($namaLokasi) {
+        return $query->whereHas('lokasis', function($q) use ($namaLokasi) {
             $q->where('nama_lokasi', $namaLokasi);
         });
     }
