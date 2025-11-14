@@ -9,7 +9,7 @@ use App\Http\Controllers\PengaduanController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\LokasiController;
 use App\Http\Controllers\Petugas\PetugasController;
-use App\Http\Controllers\TemporaryItemController; // <-- BARU
+use App\Http\Controllers\TemporaryItemController;
 
 // Controller Petugas
 use App\Http\Controllers\Petugas\DashboardController as PetugasDashboardController;
@@ -17,9 +17,9 @@ use App\Http\Controllers\Petugas\PengaduanController as PetugasPengaduanControll
 use App\Http\Controllers\Petugas\RiwayatController as PetugasRiwayatController;
 
 /*
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------
 | AUTH ROUTES
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------
 */
 Route::middleware('guest')->group(function () {
     Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
@@ -31,18 +31,18 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 /*
-|--------------------------------------------------------------------------
-| DASHBOARD UMUM (opsional)
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------
+| DASHBOARD UMUM
+|------------------------------------------------------------------
 */
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
 /*
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------
 | ADMIN ROUTES
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------
 */
 Route::middleware(['auth', 'redirect.role:admin,administrator'])
     ->prefix('admin')
@@ -51,7 +51,7 @@ Route::middleware(['auth', 'redirect.role:admin,administrator'])
 
         Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
 
-        // Temporary items (MENGGUNAKAN TEMPORARYITEMCONTROLLER)
+        // Temporary items
         Route::get('/temp-items', [TemporaryItemController::class, 'index'])->name('temp.items');
         Route::post('/temp-items/{id}/approve', [TemporaryItemController::class, 'approve'])->name('temp.items.approve');
         Route::post('/temp-items/{id}/reject', [TemporaryItemController::class, 'reject'])->name('temp.items.reject');
@@ -64,22 +64,25 @@ Route::middleware(['auth', 'redirect.role:admin,administrator'])
         Route::resource('lokasi', LokasiController::class);
         Route::resource('petugas', PetugasController::class);
 
-        // Lokasi detail dan item management
+        // Petugas create-complete (langsung input data user + petugas)
+        Route::get('petugas/create-complete', [PetugasController::class, 'createComplete'])->name('petugas.createComplete');
+        Route::post('petugas/store-complete', [PetugasController::class, 'storeComplete'])->name('petugas.storeComplete');
+
+        // Lokasi detail & item management
         Route::get('lokasi/{lokasi}/detail', [LokasiController::class, 'show'])->name('lokasi.detail');
         Route::post('lokasi/{lokasi}/add-item', [LokasiController::class, 'addItem'])->name('lokasi.add-item');
         Route::delete('lokasi/{lokasi}/remove-item/{idItem}', [LokasiController::class, 'removeItem'])->name('lokasi.remove-item');
     });
 
 /*
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------
 | PETUGAS ROUTES
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------
 */
 Route::middleware(['auth', 'redirect.role:petugas'])
     ->prefix('petugas')
     ->name('petugas.')
     ->group(function () {
-
         Route::get('/dashboard', [PetugasDashboardController::class, 'index'])->name('dashboard');
         Route::get('/pengaduan', [PetugasPengaduanController::class, 'index'])->name('pengaduan.index');
         Route::get('/pengaduan/{id}', [PetugasPengaduanController::class, 'show'])->name('pengaduan.show');
@@ -88,21 +91,20 @@ Route::middleware(['auth', 'redirect.role:petugas'])
     });
 
 /*
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------
 | PENGGUNA ROUTES
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------
 */
 Route::middleware(['auth', 'redirect.role:pengguna,user'])
     ->prefix('user')
     ->name('user.')
     ->group(function () {
-
         Route::get('/dashboard', [DashboardController::class, 'userDashboard'])->name('dashboard');
         Route::get('/profile', [DashboardController::class, 'userProfile'])->name('profile');
         Route::get('/profile/edit', [DashboardController::class, 'editProfile'])->name('profile.edit');
         Route::post('/profile/update', [DashboardController::class, 'updateProfile'])->name('profile.update');
 
-        // Aduan routes
+        // Aduan
         Route::get('/aduan/create', [AduanController::class, 'create'])->name('aduan.create');
         Route::post('/aduan', [AduanController::class, 'store'])->name('aduan.store');
         Route::get('/aduan/history', [AduanController::class, 'history'])->name('aduan.history');
@@ -112,8 +114,8 @@ Route::middleware(['auth', 'redirect.role:pengguna,user'])
     });
 
 /*
-|--------------------------------------------------------------------------
-| TEST ROUTE (Opsional)
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------
+| TEST ROUTE
+|------------------------------------------------------------------
 */
 Route::get('/test-route', fn() => "✅ ROUTE BERHASIL!");

@@ -64,7 +64,6 @@
                             <select name="role" class="form-select" required>
                                 <option value="">-- Pilih Role --</option>
                                 <option value="administrator" {{ old('role') == 'administrator' ? 'selected' : '' }}>Administrator</option>
-                                <option value="petugas" {{ old('role') == 'petugas' ? 'selected' : '' }}>Petugas</option>
                                 <option value="pengguna" {{ old('role') == 'pengguna' ? 'selected' : '' }}>Pengguna</option>
                             </select>
                             @error('role')
