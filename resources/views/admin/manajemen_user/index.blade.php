@@ -81,7 +81,7 @@
                                         <div>
                                             <strong class="text-dark">{{ $user->nama_pengguna }}</strong>
                                             <br>
-                                            <small class="text-muted">ID: {{ $user->id }}</small>
+                                            <small class="text-muted">No: {{ $key + 1 }}</small>
                                         </div>
                                     </div>
                                 </td>
