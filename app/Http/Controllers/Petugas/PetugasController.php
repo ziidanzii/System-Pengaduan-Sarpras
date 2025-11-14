@@ -28,7 +28,7 @@ class PetugasController extends Controller
     // Form tambah petugas + user
     public function createComplete()
     {
-        return view('admin.manajemen_petugas.create')
+        return view('admin.manajemen_petugas.create');
     }
 
     // Method store untuk route resource
