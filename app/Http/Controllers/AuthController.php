@@ -75,7 +75,7 @@ class AuthController extends Controller
 
             // Redirect based on role
             $role = strtolower($user->role);
-            if ($role === 'admin' || $role === 'admin') {
+            if ($role === 'admin') {
                 return redirect()->intended(route('admin.dashboard'));
             } elseif ($role === 'petugas') {
                 return redirect()->intended(route('petugas.dashboard'));
