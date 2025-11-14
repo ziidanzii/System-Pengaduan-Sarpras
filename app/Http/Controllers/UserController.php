@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Petugas;
 use App\Models\Pengaduan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -26,36 +25,26 @@ class UserController extends Controller
 
     // Simpan user baru
     public function store(Request $request)
-    {
-        $request->validate([
-            'nama_pengguna' => 'required|string|max:200',
-            'username' => 'required|string|unique:users',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:6',
-            'role' => 'required|in:administrator,petugas,pengguna',
-        ]);
+{
+    $request->validate([
+        'nama_pengguna' => 'required|string|max:200',
+        'username' => 'required|string|unique:users',
+        'email' => 'required|email|unique:users', // Tambahkan validasi email
+        'password' => 'required|string|min:6',
+        'role' => 'required|in:administrator,petugas,pengguna',
+    ]);
 
-        $user = User::create([
-            'nama_pengguna' => $request->nama_pengguna,
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => $request->role,
-        ]);
+    User::create([
+        'nama_pengguna' => $request->nama_pengguna,
+        'username' => $request->username,
+        'email' => $request->email, // Tambahkan email
+        'password' => Hash::make($request->password),
+        'role' => $request->role,
+    ]);
 
-        // Jika role = petugas, simpan juga ke tabel petugas
-        if ($user->role === 'petugas') {
-            Petugas::create([
-                'user_id' => $user->id,
-                'nama' => $user->nama_pengguna,
-                'gender' => null,  // bisa diupdate nanti
-                'telp' => null,    // bisa diupdate nanti
-            ]);
-        }
-
-        return redirect()->route('admin.users.index')
-                         ->with('success', 'User berhasil ditambahkan');
-    }
+    return redirect()->route('admin.users.index')
+                     ->with('success', 'User berhasil ditambahkan');
+}
 
     // Form edit user
     public function edit($id)
@@ -73,7 +62,7 @@ class UserController extends Controller
             'nama_pengguna' => 'required|string|max:200',
             'username' => 'required|string|unique:users,username,' . $user->id,
             'role' => 'required|in:administrator,petugas,pengguna',
-            'password' => 'nullable|string|min:6|confirmed',
+            'password' => 'nullable|string|min:6|confirmed', // password optional & harus konfirmasi
         ]);
 
         $data = $request->only(['nama_pengguna', 'username', 'role']);
@@ -83,23 +72,6 @@ class UserController extends Controller
         }
 
         $user->update($data);
-
-        // Jika role = petugas, pastikan ada record di tabel petugas
-        if ($user->role === 'petugas') {
-            if (!$user->petugas) {
-                Petugas::create([
-                    'user_id' => $user->id,
-                    'nama' => $user->nama_pengguna,
-                    'gender' => null,
-                    'telp' => null,
-                ]);
-            }
-        } else {
-            // Jika sebelumnya petugas tapi sekarang bukan, bisa hapus record petugas
-            if ($user->petugas) {
-                $user->petugas->delete();
-            }
-        }
 
         return redirect()->route('admin.users.index')
                          ->with('success', 'User berhasil diperbarui');
@@ -114,12 +86,11 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')
                          ->with('success', 'User berhasil dihapus');
     }
-
-    // Profil user
     public function profile()
     {
         $user = Auth::user();
 
+        // Ambil statistik aduan dari database
         $stats = [
             'total' => Pengaduan::where('user_id', $user->id)->count(),
             'diajukan' => Pengaduan::where('user_id', $user->id)->where('status', 'Diajukan')->count(),
@@ -143,6 +114,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'nama_pengguna' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
+            // tambahkan validasi lainnya sesuai kebutuhan
         ]);
 
         $user->update($validated);
