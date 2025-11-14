@@ -15,7 +15,7 @@ class LokasiController extends Controller
      */
     public function index()
     {
-        $lokasi = Lokasi::orderBy('nama_lokasi', 'asc')->get();
+        $lokasis = Lokasi::orderBy('nama_lokasi', 'asc')->get();
         return view('admin.manajemen_lokasi.index', compact('lokasi'));
     }
 
