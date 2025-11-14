@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Petugas; 
 use App\Models\Pengaduan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -29,18 +30,28 @@ class UserController extends Controller
     $request->validate([
         'nama_pengguna' => 'required|string|max:200',
         'username' => 'required|string|unique:users',
-        'email' => 'required|email|unique:users', // Tambahkan validasi email
+        'email' => 'required|email|unique:users',
         'password' => 'required|string|min:6',
         'role' => 'required|in:administrator,petugas,pengguna',
     ]);
 
-    User::create([
+    $user = User::create([
         'nama_pengguna' => $request->nama_pengguna,
         'username' => $request->username,
-        'email' => $request->email, // Tambahkan email
+        'email' => $request->email,
         'password' => Hash::make($request->password),
         'role' => $request->role,
     ]);
+
+    // Jika role = petugas, simpan juga ke tabel petugas
+    if ($user->role === 'petugas') {
+        Petugas::create([
+            'user_id' => $user->id,
+            'nama_petugas' => $user->nama_pengguna,
+            'email' => $user->email,
+            // tambahkan kolom lain sesuai struktur tabel petugas
+        ]);
+    }
 
     return redirect()->route('admin.users.index')
                      ->with('success', 'User berhasil ditambahkan');
