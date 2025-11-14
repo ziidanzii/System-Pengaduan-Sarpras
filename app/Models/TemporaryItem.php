@@ -11,6 +11,8 @@ class TemporaryItem extends Model
 
     protected $table = 'temporary_item';
     protected $primaryKey = 'id_temporary';
+    public $timestamps = false;
+
 
     protected $fillable = [
         'id_item',
