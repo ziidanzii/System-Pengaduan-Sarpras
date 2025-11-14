@@ -22,9 +22,10 @@ class LokasiController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'nama_lokasi' => 'required|string|max:200|unique:lokasi,nama_lokasi',
-        ]);
+       $request->validate([
+            'nama_lokasi' => 'required|string|max:200|unique:lokasis,nama_lokasi',
+    ]);
+
 
         Lokasi::create([
             'nama_lokasi' => $request->nama_lokasi,
@@ -59,8 +60,9 @@ class LokasiController extends Controller
         $lokasi = Lokasi::findOrFail($id);
 
         $request->validate([
-            'nama_lokasi' => 'required|string|max:200|unique:lokasi,nama_lokasi,' . $lokasi->id_lokasi . ',id_lokasi',
+         'nama_lokasi' => 'required|string|max:200|unique:lokasis,nama_lokasi,' . $lokasi->id_lokasi . ',id_lokasi',
         ]);
+
 
         $lokasi->update([
             'nama_lokasi' => $request->nama_lokasi,
