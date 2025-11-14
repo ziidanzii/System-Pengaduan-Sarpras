@@ -85,6 +85,8 @@ class PetugasController extends Controller
     {
         $petugas = Petugas::with('user')->findOrFail($id);
 
+        // DEBUG: lihat payload request sementara — hapus setelah debugging
+        dd($request->all());
         $request->validate([
             'nama' => 'required|string|max:200',
             'gender' => 'required|in:P,L',
