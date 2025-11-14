@@ -18,6 +18,7 @@ class Lokasi extends Model
         return $this->belongsToMany(
             Item::class,
             'item_lokasi',
+            'list_lokasi',  
             'id_lokasi', // foreign key di pivot untuk Lokasi
             'id_item'    // foreign key di pivot untuk Item
         );
