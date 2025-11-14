@@ -19,16 +19,27 @@ class Item extends Model
         'foto',
     ];
 
-    // Relasi many-to-many dengan lokasi melalui list_lokasi
+    /**
+     * Relasi Many-to-Many dengan Lokasi melalui tabel list_lokasi
+     *
+     * item -> list_lokasi -> lokasi
+     */
     public function lokasi()
     {
-        return $this->belongsToMany(\App\Models\Lokasi::class, 'list_lokasi', 'id_item', 'id_lokasi');
+        return $this->belongsToMany(
+            \App\Models\Lokasi::class,
+            'list_lokasi',   // nama tabel pivot
+            'id_item',       // foreign key item
+            'id_lokasi'      // foreign key lokasi
+        );
     }
 
-    // Scope untuk mendapatkan item berdasarkan lokasi
+    /**
+     * Scope: Filter item berdasarkan nama lokasi
+     */
     public function scopeByLokasi($query, $namaLokasi)
     {
-        return $query->whereHas('lokasis', function($q) use ($namaLokasi) {
+        return $query->whereHas('lokasi', function($q) use ($namaLokasi) {
             $q->where('nama_lokasi', $namaLokasi);
         });
     }
