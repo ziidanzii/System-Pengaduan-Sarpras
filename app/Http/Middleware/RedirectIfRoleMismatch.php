@@ -15,15 +15,6 @@ class RedirectIfRoleMismatch
         }
 
         $userRole = strtolower(Auth::user()->role);
-        
-        // DEBUG: Log untuk melihat role dan roles yang diterima
-        \Log::debug('RedirectIfRoleMismatch Debug', [
-            'user_role' => $userRole,
-            'expected_roles' => $roles,
-            'user_id' => Auth::id(),
-            'user' => Auth::user()->username,
-            'in_array_result' => in_array($userRole, $roles),
-        ]);
 
         if (!in_array($userRole, $roles)) {
             switch ($userRole) {
