@@ -16,10 +16,10 @@ class IsAdmin
 
         $role = strtolower(Auth::user()->role);
 
-        if (!in_array($role, ['admin', 'administrator'])) {
+        if (!in_array($role, ['admin', 'admin'])) {
             // Jika user mencoba akses admin route
             if ($request->expectsJson()) {
-                return response()->json(['message' => 'Akses ditolak. Khusus administrator.'], 403);
+                return response()->json(['message' => 'Akses ditolak. Khusus admin.'], 403);
             }
 
             // Kalau lewat browser, redirect saja

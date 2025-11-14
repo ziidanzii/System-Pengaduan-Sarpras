@@ -16,7 +16,7 @@ class AdminPengaduanController extends Controller
         $user = $request->user();
 
         // Cek apakah user adalah admin
-        if ($user->role !== 'admin' && $user->role !== 'administrator') {
+        if ($user->role !== 'admin' && $user->role !== 'admin') {
             return response()->json([
                 'status' => false,
                 'message' => 'Unauthorized. Admin access required.',
@@ -60,7 +60,7 @@ class AdminPengaduanController extends Controller
         $user = $request->user();
 
         // Cek apakah user adalah admin
-        if ($user->role !== 'admin' && $user->role !== 'administrator') {
+        if ($user->role !== 'admin' && $user->role !== 'admin') {
             return response()->json([
                 'status' => false,
                 'message' => 'Unauthorized. Admin access required.',
@@ -81,7 +81,7 @@ class AdminPengaduanController extends Controller
         $user = $request->user();
 
         // Cek apakah user adalah admin
-        if ($user->role !== 'admin' && $user->role !== 'administrator') {
+        if ($user->role !== 'admin' && $user->role !== 'admin') {
             return response()->json([
                 'status' => false,
                 'message' => 'Unauthorized. Admin access required.',

@@ -31,7 +31,7 @@ class UserController extends Controller
         'username' => 'required|string|unique:users',
         'email' => 'required|email|unique:users', // Tambahkan validasi email
         'password' => 'required|string|min:6',
-        'role' => 'required|in:administrator,petugas,pengguna',
+        'role' => 'required|in:admin,petugas,pengguna',
     ]);
 
     User::create([

@@ -92,9 +92,9 @@
                                     {{ $user->email ?? '-' }}
                                 </td>
                                 <td>
-                                    @if($user->role == 'administrator')
+                                    @if($user->role == 'admin')
                                         <span class="badge bg-danger">
-                                            <i class="fas fa-crown me-1"></i>Administrator
+                                            <i class="fas fa-crown me-1"></i>admin
                                         </span>
                                     @elseif($user->role == 'petugas')
                                         <span class="badge bg-warning text-dark">

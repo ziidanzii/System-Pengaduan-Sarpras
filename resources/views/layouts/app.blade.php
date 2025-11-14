@@ -343,7 +343,7 @@
             <p class="mb-2">
                 &copy; {{ date('Y') }} <strong class="text-primary">Aplikasi Sarpras</strong> - Admin Panel
             </p>
-            <small>Sistem Pengaduan Sarana dan Prasarana - Administrator</small>
+            <small>Sistem Pengaduan Sarana dan Prasarana - admin</small>
         </div>
     </footer>
 

@@ -22,7 +22,7 @@ class DashboardController extends Controller
 
         $role = strtolower($user->role);
 
-        if ($role === 'administrator' || $role === 'admin') {
+        if ($role === 'admin' || $role === 'admin') {
             return redirect()->route('admin.dashboard');
         } elseif ($role === 'petugas') {
             return redirect()->route('petugas.dashboard');

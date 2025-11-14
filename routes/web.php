@@ -44,7 +44,7 @@ Route::middleware(['auth'])->group(function () {
 | ADMIN ROUTES
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'redirect.role:admin,administrator'])
+Route::middleware(['auth', 'redirect.role:admin,admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
