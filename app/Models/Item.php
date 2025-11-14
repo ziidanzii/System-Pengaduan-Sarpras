@@ -20,7 +20,7 @@ class Item extends Model
     ];
 
     // Relasi many-to-many dengan lokasi melalui list_lokasi
-    public function lokasis()
+    public function lokasi()
     {
         return $this->belongsToMany(\App\Models\Lokasi::class, 'list_lokasi', 'id_item', 'id_lokasi');
     }
