@@ -80,7 +80,7 @@ Route::middleware(['auth', 'redirect.role:petugas'])
     ->name('petugas.')
     ->group(function () {
 
-        Route::get('/dashboard', [PetugasDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [PetugasDashboardController::class, 'index'])->name('petugas.dashboard');
         Route::get('/pengaduan', [PetugasPengaduanController::class, 'index'])->name('pengaduan.index');
         Route::get('/pengaduan/{id}', [PetugasPengaduanController::class, 'show'])->name('pengaduan.show');
         Route::post('/pengaduan/{id}/update', [PetugasPengaduanController::class, 'update'])->name('pengaduan.update');
