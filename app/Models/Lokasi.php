@@ -6,21 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Lokasi extends Model
 {
-    protected $table = 'lokasis';        // nama tabel sesuai DB
-    protected $primaryKey = 'id_lokasi'; // primary key sesuai DB
+    // Sesuai migration `create_lokasi_table` nama tabel adalah `lokasi`
+    protected $table = 'lokasi';
+    protected $primaryKey = 'id_lokasi';
 
     protected $fillable = ['nama_lokasi'];
 
-    public $timestamps = false; // jika tabel tidak punya created_at / updated_at
+    // migration menambahkan timestamps()
+    public $timestamps = true;
 
-   public function items()
-{
-    return $this->belongsToMany(
-        Item::class,
-        'list_lokasi',  // tabel pivot YANG BENAR
-        'id_lokasi',    // foreign key untuk Lokasi
-        'id_item'       // foreign key untuk Item
-    );
-}
-
+    public function items()
+    {
+        return $this->belongsToMany(
+            \App\Models\Item::class,
+            'list_lokasi',  // nama tabel pivot
+            'id_lokasi',    // foreign key untuk Lokasi pada pivot
+            'id_item'       // foreign key untuk Item pada pivot
+        );
+    }
 }
