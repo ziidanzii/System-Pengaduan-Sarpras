@@ -61,7 +61,7 @@ class UserController extends Controller
         $request->validate([
             'nama_pengguna' => 'required|string|max:200',
             'username' => 'required|string|unique:users,username,' . $user->id,
-            'role' => 'required|in:administrator,petugas,pengguna',
+            'role' => 'required|in:admin,petugas,pengguna',
             'password' => 'nullable|string|min:6|confirmed', // password optional & harus konfirmasi
         ]);
 
