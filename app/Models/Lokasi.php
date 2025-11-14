@@ -13,14 +13,14 @@ class Lokasi extends Model
 
     public $timestamps = false; // jika tabel tidak punya created_at / updated_at
 
-    public function items()
-    {
-        return $this->belongsToMany(
-            Item::class,
-            'item_lokasi',
-            'list_lokasi',  
-            'id_lokasi', // foreign key di pivot untuk Lokasi
-            'id_item'    // foreign key di pivot untuk Item
-        );
-    }
+   public function items()
+{
+    return $this->belongsToMany(
+        Item::class,
+        'list_lokasi',  // tabel pivot YANG BENAR
+        'id_lokasi',    // foreign key untuk Lokasi
+        'id_item'       // foreign key untuk Item
+    );
+}
+
 }
