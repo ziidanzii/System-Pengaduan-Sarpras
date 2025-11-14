@@ -6,19 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Lokasi extends Model
 {
-    // adjust table/primaryKey if your DB uses different names
-    protected $table = 'lokasi';
-    // protected $primaryKey = 'id_lokasi';
+    protected $table = 'lokasi';        // nama tabel sesuai DB
+    protected $primaryKey = 'id_lokasi'; // primary key sesuai DB
 
-    // allow mass assignment for nama_lokasi (add others if needed)
     protected $fillable = ['nama_lokasi'];
 
-    // if your table doesn't have timestamps, uncomment:
-    // public $timestamps = false;
+    public $timestamps = false; // jika tabel tidak punya created_at / updated_at
 
-    // example relation (optional) — adjust relation name and pivot/table if different
     public function items()
     {
-        return $this->belongsToMany(Item::class, 'item_lokasi', 'id_lokasi', 'id_item');
+        return $this->belongsToMany(
+            Item::class,
+            'item_lokasi',
+            'id_lokasi', // foreign key di pivot untuk Lokasi
+            'id_item'    // foreign key di pivot untuk Item
+        );
     }
 }
