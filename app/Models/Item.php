@@ -24,15 +24,16 @@ class Item extends Model
      *
      * item -> list_lokasi -> lokasi
      */
-    public function lokasi()
-    {
-        return $this->belongsToMany(
-            \App\Models\Lokasi::class,
-            'list_lokasi',   // nama tabel pivot
-            'id_item',       // foreign key item
-            'id_lokasi'      // foreign key lokasi
-        );
-    }
+    public function lokasis()
+{
+    return $this->belongsToMany(
+        \App\Models\Lokasi::class,
+        'list_lokasi',
+        'id_item',
+        'id_lokasi'
+    );
+}
+
 
     /**
      * Scope: Filter item berdasarkan nama lokasi
