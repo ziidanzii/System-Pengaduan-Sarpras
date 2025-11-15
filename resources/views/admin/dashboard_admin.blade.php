@@ -44,30 +44,6 @@
             </div>
         </div>
 
-        {{-- GRAFIK DISTRIBUSI STATUS --}}
-        <div class="row mb-5">
-            <div class="col-md-6">
-                <div class="card shadow-sm border-0 h-100">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">📈 Distribusi Status Pengaduan</h5>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="statusDistributionChart" height="250"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card shadow-sm border-0 h-100">
-                    <div class="card-header bg-success text-white">
-                        <h5 class="mb-0">📅 Tren Pengaduan 7 Hari Terakhir</h5>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="weeklyTrendChart" height="250"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         {{-- PENGAJUAN TERBARU --}}
         <div class="row">
             <div class="col-12">
@@ -203,9 +179,5 @@
         letter-spacing: 0.5px;
     }
 </style>
-@endpush
-
-@push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 @endpush
 @endsection
