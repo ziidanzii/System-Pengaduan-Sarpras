@@ -46,86 +46,112 @@
 
         /* Navbar */
         .navbar-custom {
-            background: rgba(255,255,255,0.6);
+            background: rgba(255,255,255,0.7);
             border-bottom: 1px solid var(--border);
-            padding: 0.85rem 0;
+            backdrop-filter: blur(8px);
+            padding: 0.65rem 0;
             box-shadow: var(--shadow);
-            backdrop-filter: saturate(1.2) blur(10px);
         }
 
         .navbar-brand {
             font-weight: 700;
-            font-size: 1.5rem;
-            color: var(--text-primary) !important;
+            font-size: 1.3rem;
             display: flex;
             align-items: center;
+            color: var(--text-primary) !important;
         }
 
         .navbar-brand i {
             color: var(--primary);
             background: var(--primary-50);
-            padding: 0.5rem;
-            border-radius: 12px;
-            margin-right: 0.75rem;
+            padding: 0.45rem;
+            border-radius: 10px;
+            margin-right: 0.65rem;
         }
 
         .nav-link {
             color: var(--text-secondary) !important;
             font-weight: 500;
-            padding: 0.75rem 1.25rem;
-            margin: 0 0.2rem;
-            border-radius: 12px;
-            transition: all 0.3s ease;
+            padding: 0.6rem 0.9rem;
+            border-radius: 10px;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .nav-link:hover {
-            color: var(--primary) !important;
             background: var(--primary-50);
-            transform: translateY(-1px);
+            color: var(--primary) !important;
         }
 
         .nav-link.active {
-            color: var(--primary) !important;
             background: var(--primary-50);
+            color: var(--primary) !important;
             font-weight: 600;
         }
 
-        /* User Dropdown */
+        /* Hide text & compress navbar on small screens */
+        @media (max-width: 576px) {
+            .navbar-brand span { display: none; }
+            .navbar-brand i { margin-right: 0; }
+
+            .nav-link span { display: none; }
+            .nav-link i { margin-right: 0; font-size: 1.3rem; }
+
+            .user-dropdown .dropdown-toggle span { display: none; }
+        }
+
+        /* Dropdown */
         .user-dropdown .dropdown-menu {
             background: var(--light);
-            border: 1px solid var(--border);
             border-radius: 12px;
+            border: 1px solid var(--border);
             box-shadow: var(--shadow-lg);
         }
 
         .user-dropdown .dropdown-item:hover {
             background: var(--primary-50);
             color: var(--primary);
-            transform: translateX(5px);
         }
 
-        /* Main */
+        /* Content area */
         .main-content {
-            margin-top: 2rem;
-            padding-bottom: 2rem;
-            min-height: calc(100vh - 200px);
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                margin-top: 1rem;
+                padding: 0 0.5rem;
+            }
+        }
+
+        /* Table responsiveness */
+        table {
+            width: 100%;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
         }
 
         /* Footer */
         .footer-custom {
             background: var(--light);
             border-top: 1px solid var(--border);
-            padding: 2rem 0;
+            padding: 1.5rem 0;
             margin-top: 3rem;
         }
 
-        /* Custom status */
-        .status-disetujui {
-            background-color: var(--secondary) !important;
-            color: var(--light) !important;
+        @media (max-width: 600px) {
+            .footer-custom {
+                padding: 1rem 0;
+            }
         }
 
     </style>
+
     @stack('styles')
 </head>
 
@@ -134,7 +160,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
         <div class="container">
-            
+
             <a class="navbar-brand" href="{{ route('petugas.dashboard') }}">
                 <i class="fas fa-user-cog"></i>
                 <span>SARPRAS PETUGAS</span>
@@ -150,21 +176,21 @@
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('petugas.dashboard') ? 'active' : '' }}"
                            href="{{ route('petugas.dashboard') }}">
-                            <i class="fas fa-home"></i> Dashboard
+                            <i class="fas fa-home"></i> <span>Dashboard</span>
                         </a>
                     </li>
 
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('petugas.pengaduan.index') ? 'active' : '' }}"
                            href="{{ route('petugas.pengaduan.index') }}">
-                            <i class="fas fa-clipboard-list"></i> Pengaduan
+                            <i class="fas fa-clipboard-list"></i> <span>Pengaduan</span>
                         </a>
                     </li>
 
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('petugas.riwayat') ? 'active' : '' }}"
                            href="{{ route('petugas.riwayat') }}">
-                            <i class="fas fa-history"></i> Riwayat
+                            <i class="fas fa-history"></i> <span>Riwayat</span>
                         </a>
                     </li>
 
@@ -174,8 +200,8 @@
 
                     <li class="nav-item dropdown user-dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-circle me-2"></i>
-                            {{ Auth::user()->nama_pengguna ?? 'Petugas' }}
+                            <i class="fas fa-user-circle"></i>
+                            <span>{{ Auth::user()->nama_pengguna ?? 'Petugas' }}</span>
                         </a>
 
                         <ul class="dropdown-menu dropdown-menu-end">
@@ -188,8 +214,8 @@
                                 </form>
                             </li>
                         </ul>
-
                     </li>
+
                 </ul>
             </div>
 
