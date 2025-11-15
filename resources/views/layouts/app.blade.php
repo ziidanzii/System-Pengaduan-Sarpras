@@ -231,54 +231,6 @@
 
             .user-dropdown .dropdown-toggle span { display: none; }
         }
-        /* --- PERBAIKAN RESPONSIVE ANDROID (OVERRIDES) --- */
-        /* Consolidated mobile rules added to improve stacking and spacing on small devices.
-           These intentionally override earlier rules where necessary without removing core styles. */
-
-        /* Small phones (<= 480px): tighter container, slightly smaller typography and brand */
-        @media (max-width: 480px) {
-            .content-container { padding: 0 0.5rem; }
-            body { font-size: 14px; }
-            .navbar-brand { font-size: 1.1rem; }
-            .navbar-brand i { font-size: 1.2rem; padding: 0.35rem; margin-right: 0.5rem; }
-        }
-
-        /* Stack the menu on smaller screens and make links full width */
-        @media (max-width: 768px) {
-            #navbarNav .navbar-nav {
-                flex-direction: column;
-                align-items: flex-start !important;
-                gap: 0.3rem;
-                padding: 0.3rem 0;
-            }
-
-            .nav-link {
-                width: 100%;
-                padding: 0.65rem 0.9rem;
-                margin: 0;
-                display: flex;
-                align-items: center;
-                border-radius: 10px;
-            }
-
-            .nav-link i { margin-right: 0.6rem; }
-        }
-
-        /* Extra-small devices: hide text labels and tighten dropdown */
-        @media (max-width: 576px) {
-            .nav-link span, .navbar-brand span, .user-dropdown .dropdown-toggle span { display: none; }
-            .nav-link i, .navbar-brand i { margin-right: 0 !important; }
-
-            .dropdown-menu {
-                right: 10px !important;
-                left: auto !important;
-                min-width: 150px;
-            }
-
-            .card-custom { margin-bottom: 1rem; padding: 0.75rem; }
-
-            .footer-custom { padding: 1.2rem 0; font-size: 0.85rem; }
-        }
     </style>
 </head>
 
