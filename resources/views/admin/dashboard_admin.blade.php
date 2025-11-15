@@ -159,63 +159,50 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-
-    /* =======================
-       CHART: DONUT STATUS
-    ========================= */
-    new Chart(document.getElementById('statusDistributionChart'), {
+    // Donut Chart - Distribusi Status Pengaduan
+    const statusCtx = document.getElementById('statusDistributionChart').getContext('2d');
+    const statusDistributionChart = new Chart(statusCtx, {
         type: 'doughnut',
         data: {
-            labels: ['Selesai', 'Diproses', 'Diajukan', 'Ditolak'],
+            labels: {!! json_encode(array_keys($statusCounts)) !!},
             datasets: [{
-                data: [
-                    {{ $pengaduanSelesai ?? 0 }},
-                    {{ $pengaduanDiproses ?? 0 }},
-                    {{ $pengaduanDiajukan ?? 0 }},
-                    {{ $pengaduanDitolak ?? 0 }}
-                ],
-                backgroundColor: ['#28a745','#ffc107','#17a2b8','#dc3545'],
-                borderColor: '#fff',
-                borderWidth: 2
+                data: {!! json_encode(array_values($statusCounts)) !!},
+                backgroundColor: ['#007bff', '#ffc107', '#28a745', '#dc3545', '#6c757d'],
             }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false,
             plugins: {
-                legend: { position: 'bottom' },
+                legend: {
+                    position: 'bottom',
+                }
             }
         }
     });
 
-    /* =======================
-       CHART: TREND MINGGUAN
-    ========================= */
-    new Chart(document.getElementById('weeklyTrendChart'), {
+    // Line Chart - Tren Pengaduan 7 Hari Terakhir
+    const trendCtx = document.getElementById('weeklyTrendChart').getContext('2d');
+    const weeklyTrendChart = new Chart(trendCtx, {
         type: 'line',
         data: {
-            labels: {!! json_encode($last7Days) !!},
+            labels: {!! json_encode($weeklyDates) !!},
             datasets: [{
                 label: 'Jumlah Pengaduan',
-                data: {!! json_encode($last7DaysData) !!},
+                data: {!! json_encode($weeklyCounts) !!},
+                fill: false,
                 borderColor: '#28a745',
-                backgroundColor: 'rgba(40,167,69,0.15)',
-                borderWidth: 3,
-                tension: 0.4,
-                fill: true,
-                pointRadius: 4,
+                tension: 0.1
             }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false,
             scales: {
-                y: { beginAtZero: true }
+                y: {
+                    beginAtZero: true,
+                    precision: 0
+                }
             }
         }
-    });
-
 });
 </script>
 @endpush
