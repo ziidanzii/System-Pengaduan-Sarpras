@@ -40,7 +40,7 @@ class TemporaryItemController extends Controller
                 $query->orderByRaw("FIELD(status, 'pending', 'approved', 'rejected')");
             }
 
-            $temporaryItems = $query->orderBy('created_at', 'desc')->get();
+            $temporaryItems = $query->orderBy('id_temporary', 'desc')->get();
 
             // Pastikan path view sudah benar
             return view('admin.manajemen_pengaduan.temporary_items', compact('temporaryItems'));
