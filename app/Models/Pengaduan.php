@@ -99,7 +99,13 @@ class Pengaduan extends Model
         return in_array($this->status, [self::STATUS_DIAJUKAN]);
     }
 
-    // Method untuk mengecek apakah bisa diupdate oleh petugas
+    // Method untuk mengecek apakah bisa diupdate oleh petugas (dari status Diajukan menjadi Disetujui/Ditolak)
+    public function canBeApprovedByPetugas()
+    {
+        return $this->status === self::STATUS_DIAJUKAN;
+    }
+
+    // Method untuk mengecek apakah bisa diupdate oleh petugas (dari Disetujui/Diproses menjadi Diproses/Selesai)
     public function canBeUpdatedByPetugas()
     {
         return in_array($this->status, [self::STATUS_DISETUJUI, self::STATUS_DIPROSES]);

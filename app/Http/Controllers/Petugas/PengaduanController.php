@@ -15,16 +15,17 @@ class PengaduanController extends Controller
      */
     public function index()
     {
-        // Petugas melihat Disetujui, Diproses, dan Selesai.
-        // Urutan: Disetujui (terbaru → lama) → Diproses → Selesai
-        $pengaduan = Pengaduan::whereIn('status', ['Disetujui', 'Diproses', 'Selesai'])
+        // Petugas melihat semua status: Diajukan, Disetujui, Diproses, dan Selesai.
+        // Urutan: Diajukan (terbaru → lama) → Disetujui → Diproses → Selesai
+        $pengaduan = Pengaduan::whereIn('status', ['Diajukan', 'Disetujui', 'Diproses', 'Selesai'])
                             ->with(['user', 'item']) // Load relasi user dan item
                             ->orderByRaw("
                                 CASE
-                                    WHEN status = 'Disetujui' THEN 1
-                                    WHEN status = 'Diproses' THEN 2
-                                    WHEN status = 'Selesai' THEN 3
-                                    ELSE 4
+                                    WHEN status = 'Diajukan' THEN 1
+                                    WHEN status = 'Disetujui' THEN 2
+                                    WHEN status = 'Diproses' THEN 3
+                                    WHEN status = 'Selesai' THEN 4
+                                    ELSE 5
                                 END,
                                 created_at DESC
                             ")
@@ -40,14 +41,11 @@ class PengaduanController extends Controller
     {
         $pengaduan = Pengaduan::with(['user', 'item', 'petugas'])->findOrFail($id);
 
-        // Cek apakah petugas bisa mengakses pengaduan ini (Disetujui, Diproses, atau Selesai)
-        if (!in_array($pengaduan->status, ['Disetujui', 'Diproses', 'Selesai'])) {
+        // Cek apakah petugas bisa mengakses pengaduan ini (Diajukan, Disetujui, Diproses, atau Selesai)
+        if (!in_array($pengaduan->status, ['Diajukan', 'Disetujui', 'Diproses', 'Selesai'])) {
             return redirect()->route('petugas.pengaduan.index')
                              ->with('error', 'Pengaduan ini tidak dapat diproses karena status: ' . $pengaduan->status);
         }
-
-        // Asumsi ada method canBeUpdatedByPetugas() di model Pengaduan yang melakukan pengecekan ini,
-        // namun pengecekan status di atas sudah cukup untuk konteks ini.
 
         return view('petugas.pengaduan.show', compact('pengaduan'));
     }
@@ -111,6 +109,76 @@ class PengaduanController extends Controller
 
         return redirect()->route('petugas.pengaduan.index')
                          ->with('success', 'Status pengaduan berhasil diperbarui menjadi ' . $request->status . '.');
+    }
+
+    /**
+     * Petugas menyetujui pengaduan (dari status Diajukan menjadi Disetujui)
+     */
+    public function approve(Request $request, $id)
+    {
+        $pengaduan = Pengaduan::findOrFail($id);
+
+        // Cek apakah pengaduan masih status Diajukan
+        if (!$pengaduan->canBeApprovedByPetugas()) {
+            return redirect()->route('petugas.pengaduan.show', $id)
+                             ->with('error', 'Pengaduan ini tidak dapat disetujui karena status: ' . $pengaduan->status);
+        }
+
+        $request->validate([
+            'saran_petugas' => 'nullable|string|max:500',
+        ]);
+
+        // Ambil ID petugas yang sedang login
+        $idPetugas = Auth::user()->petugas->id_petugas ?? null;
+
+        if (!$idPetugas) {
+            return back()->with('error', 'Akun Anda tidak terhubung dengan data Petugas.');
+        }
+
+        $pengaduan->update([
+            'status' => 'Disetujui',
+            'id_petugas' => $idPetugas,
+            'saran_petugas' => $request->saran_petugas,
+        ]);
+
+        return redirect()->route('petugas.pengaduan.show', $id)
+                         ->with('success', 'Pengaduan berhasil disetujui!');
+    }
+
+    /**
+     * Petugas menolak pengaduan (dari status Diajukan menjadi Ditolak)
+     */
+    public function reject(Request $request, $id)
+    {
+        $pengaduan = Pengaduan::findOrFail($id);
+
+        // Cek apakah pengaduan masih status Diajukan
+        if (!$pengaduan->canBeApprovedByPetugas()) {
+            return redirect()->route('petugas.pengaduan.show', $id)
+                             ->with('error', 'Pengaduan ini tidak dapat ditolak karena status: ' . $pengaduan->status);
+        }
+
+        $request->validate([
+            'saran_petugas' => 'required|string|max:500',
+        ], [
+            'saran_petugas.required' => 'Alasan penolakan harus diisi',
+        ]);
+
+        // Ambil ID petugas yang sedang login
+        $idPetugas = Auth::user()->petugas->id_petugas ?? null;
+
+        if (!$idPetugas) {
+            return back()->with('error', 'Akun Anda tidak terhubung dengan data Petugas.');
+        }
+
+        $pengaduan->update([
+            'status' => 'Ditolak',
+            'id_petugas' => $idPetugas,
+            'saran_petugas' => $request->saran_petugas,
+        ]);
+
+        return redirect()->route('petugas.pengaduan.show', $id)
+                         ->with('success', 'Pengaduan berhasil ditolak!');
     }
 
     // Metode destroy tidak diperlukan untuk petugas dalam alur normal

@@ -87,6 +87,8 @@ Route::middleware(['auth', 'redirect.role:petugas'])
         Route::get('/pengaduan', [PetugasPengaduanController::class, 'index'])->name('pengaduan.index');
         Route::get('/pengaduan/{id}', [PetugasPengaduanController::class, 'show'])->name('pengaduan.show');
         Route::post('/pengaduan/{id}/update', [PetugasPengaduanController::class, 'update'])->name('pengaduan.update');
+        Route::post('/pengaduan/{id}/approve', [PetugasPengaduanController::class, 'approve'])->name('pengaduan.approve');
+        Route::post('/pengaduan/{id}/reject', [PetugasPengaduanController::class, 'reject'])->name('pengaduan.reject');
         Route::get('/riwayat', [PetugasRiwayatController::class, 'index'])->name('riwayat');
     });
 

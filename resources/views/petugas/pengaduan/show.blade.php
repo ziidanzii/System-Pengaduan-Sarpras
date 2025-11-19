@@ -109,11 +109,89 @@
             <div class="card card-custom animate-card mb-4" style="animation-delay: 0.2s">
                 <div class="card-header bg-transparent border-bottom pb-3">
                     <h5 class="card-title mb-0 text-success fw-bold">
-                        <i class="fas fa-edit me-2"></i>Update Status
+                        <i class="fas fa-edit me-2"></i>Aksi Pengaduan
                     </h5>
                 </div>
                 <div class="card-body">
-                    @if(in_array($pengaduan->status, ['Disetujui','Diproses']))
+                    {{-- Form Approve/Reject untuk status Diajukan --}}
+                    @if($pengaduan->status === 'Diajukan')
+                    <div class="mb-4">
+                        <p class="text-muted small mb-3">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Pengaduan ini dalam status <strong>Diajukan</strong>. Anda dapat menyetujui atau menolaknya.
+                        </p>
+                    </div>
+
+                    {{-- Tab untuk Setuju/Tolak --}}
+                    <ul class="nav nav-tabs mb-3" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="approve-tab" data-bs-toggle="tab" data-bs-target="#approve-form" type="button" role="tab">
+                                <i class="fas fa-check-circle me-1 text-success"></i>Setujui
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="reject-tab" data-bs-toggle="tab" data-bs-target="#reject-form" type="button" role="tab">
+                                <i class="fas fa-times-circle me-1 text-danger"></i>Tolak
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        {{-- Tab Setujui --}}
+                        <div class="tab-pane fade show active" id="approve-form" role="tabpanel">
+                            <form method="POST" action="{{ route('petugas.pengaduan.approve', $pengaduan->id_pengaduan) }}">
+                                @csrf
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Saran Petugas (Opsional)</label>
+                                    <textarea name="saran_petugas"
+                                            class="form-control"
+                                            rows="3"
+                                            placeholder="Berikan catatan atau saran untuk pengaduan ini...">{{ $pengaduan->saran_petugas ?? '' }}</textarea>
+                                    <div class="form-text text-muted">
+                                        Saran akan ditampilkan kepada pengguna yang mengajukan pengaduan.
+                                    </div>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-success btn-lg">
+                                        <i class="fas fa-check-circle me-2"></i>Setujui Pengaduan
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        {{-- Tab Tolak --}}
+                        <div class="tab-pane fade" id="reject-form" role="tabpanel">
+                            <form method="POST" action="{{ route('petugas.pengaduan.reject', $pengaduan->id_pengaduan) }}">
+                                @csrf
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold text-danger">Alasan Penolakan <span class="text-danger">*</span></label>
+                                    <textarea name="saran_petugas"
+                                            class="form-control @error('saran_petugas') is-invalid @enderror"
+                                            rows="3"
+                                            placeholder="Jelaskan alasan pengaduan ini ditolak..."
+                                            required>{{ old('saran_petugas') }}</textarea>
+                                    @error('saran_petugas')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                    <div class="form-text text-muted">
+                                        Alasan penolakan akan ditampilkan kepada pengguna.
+                                    </div>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-danger btn-lg">
+                                        <i class="fas fa-times-circle me-2"></i>Tolak Pengaduan
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    {{-- Form Update Status untuk status Disetujui/Diproses --}}
+                    @elseif(in_array($pengaduan->status, ['Disetujui','Diproses']))
                     <form method="POST"
                           action="{{ route('petugas.pengaduan.update', $pengaduan->id_pengaduan) }}"
                           enctype="multipart/form-data">
@@ -173,6 +251,7 @@
 
                         </div>
                     </form>
+
                     @else
                     <div class="alert alert-warning mb-0">
                         <i class="fas fa-exclamation-triangle me-2"></i>
