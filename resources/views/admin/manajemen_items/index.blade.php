@@ -67,7 +67,7 @@
                     Total: {{ $items->total() }} items
                 </span>
             </div>
-            <div class="card-body p-0">
+                <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
@@ -155,9 +155,17 @@
                         </tbody>
                     </table>
                 </div>
+                </div>
 
                 {{-- PAGINATION --}}
-
+                <div class="card-footer d-flex justify-content-between align-items-center">
+                    <div>
+                        <small class="text-muted">Menampilkan {{ $items->count() }} dari {{ $items->total() }} items</small>
+                    </div>
+                    <div>
+                        {!! $items->links('pagination::bootstrap-5') !!}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
