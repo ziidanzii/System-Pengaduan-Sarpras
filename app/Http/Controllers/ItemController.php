@@ -26,7 +26,7 @@ class ItemController extends Controller
         }
 
         // Batasi tampilan per halaman menjadi 3 item dan pertahankan query string (mis. search)
-        $items = $query->orderBy('nama_item', 'asc')->paginate(3)->withQueryString();
+        $items = $query->orderBy('nama_item', 'asc')->paginate(5)->withQueryString();
 
         return view('admin.manajemen_items.index', compact('items'));
     }
