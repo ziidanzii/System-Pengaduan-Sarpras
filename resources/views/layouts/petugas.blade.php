@@ -158,6 +158,13 @@
                         <a class="nav-link {{ request()->routeIs('petugas.pengaduan.index') ? 'active' : '' }}"
                            href="{{ route('petugas.pengaduan.index') }}">
                             <i class="fas fa-clipboard-list"></i> Pengaduan
+                            @php
+                                $newCount = \App\Models\Pengaduan::where('status', 'Diajukan')
+                                    ->where('id_petugas', null)->count();
+                            @endphp
+                            @if($newCount > 0)
+                                <span class="badge bg-danger rounded-pill ms-2">{{ $newCount }}</span>
+                            @endif
                         </a>
                     </li>
 
@@ -171,6 +178,52 @@
                 </ul>
 
                 <ul class="navbar-nav align-items-center gap-2">
+
+                    @php
+                        $unreadNewPengaduan = \App\Models\Pengaduan::where('status', 'Diajukan')
+                            ->where('notified_to_petugas', false)->count();
+                    @endphp
+                    @if($unreadNewPengaduan > 0)
+                        <li class="nav-item dropdown">
+                            <a class="nav-link position-relative" href="#" id="notifDropdown" data-bs-toggle="dropdown">
+                                <i class="fas fa-bell"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ $unreadNewPengaduan }}
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notifDropdown" style="min-width: 350px;">
+                                <li><h6 class="dropdown-header">Pengaduan Baru</h6></li>
+                                <li><hr class="dropdown-divider"></li>
+                                @php
+                                    $newPengaduan = \App\Models\Pengaduan::where('status', 'Diajukan')
+                                        ->where('notified_to_petugas', false)
+                                        ->orderBy('created_at', 'desc')
+                                        ->limit(5)
+                                        ->get();
+                                @endphp
+                                @forelse($newPengaduan as $p)
+                                    <li class="px-3 py-2 border-bottom">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <div class="flex-grow-1">
+                                                <strong class="text-dark">{{ $p->nama_pengaduan }}</strong>
+                                                <div class="small text-muted">{{ $p->user->nama_pengguna ?? 'User' }}</div>
+                                                <div class="small text-muted">{{ $p->lokasi }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <a href="{{ route('petugas.pengaduan.show', $p->id_pengaduan) }}" class="btn btn-sm btn-primary">Lihat</a>
+                                            <form method="POST" action="{{ route('petugas.pengaduan.mark-notified', $p->id_pengaduan) }}" style="display: inline;">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary">Mark</button>
+                                            </form>
+                                        </div>
+                                    </li>
+                                @empty
+                                    <li class="px-3 py-2 text-center text-muted">Tidak ada pengaduan baru</li>
+                                @endforelse
+                            </ul>
+                        </li>
+                    @endif
 
                     <li class="nav-item dropdown user-dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">

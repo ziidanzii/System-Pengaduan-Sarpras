@@ -75,7 +75,9 @@ class AduanController extends Controller
             'lokasi'         => $request->lokasi,
             'id_user'        => auth()->id(),
             'tgl_pengajuan'  => now(),
-            'status'         => 'Diajukan'
+            'status'         => 'Diajukan',
+            // Set flag unread untuk petugas agar tahu ada pengaduan baru
+            'notified_to_petugas' => false,
         ];
 
         // Jika memilih item existing, gunakan id_item
@@ -143,4 +145,37 @@ class AduanController extends Controller
 
         return view('pengguna.pengaduan.history', compact('aduanList'));
     }
+    
+    /**
+     * Mark a pengaduan as notified (read) by the owner user.
+     */
+    public function markNotified(Request $request, $id)
+    {
+        $pengaduan = Pengaduan::findOrFail($id);
+
+        // Pastikan pemilik
+        if ($pengaduan->id_user !== auth()->id()) {
+            return abort(403);
+        }
+
+        $pengaduan->notified_to_user = true;
+        $pengaduan->save();
+
+        return redirect()->back()->with('success', 'Notifikasi ditandai telah dibaca.');
+    }
+
+    /**
+     * Mark a pengaduan as notified (read) by petugas.
+     */
+    public function markNotifiedPetugas(Request $request, $id)
+    {
+        $pengaduan = Pengaduan::findOrFail($id);
+
+        $pengaduan->notified_to_petugas = true;
+        $pengaduan->save();
+
+        return redirect()->back()->with('success', 'Notifikasi pengaduan baru ditandai telah dibaca.');
+    }
 }
+
+

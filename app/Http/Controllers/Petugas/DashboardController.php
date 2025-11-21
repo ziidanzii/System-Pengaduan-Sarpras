@@ -7,6 +7,29 @@ use App\Models\Pengaduan;
 
 class DashboardController extends Controller
 {
+    /**
+     * Count pengaduan baru (Diajukan tanpa petugas) untuk navbar badge
+     */
+    public function countNewPengaduan()
+    {
+        return Pengaduan::where('status', 'Diajukan')
+                        ->where('id_petugas', null)
+                        ->count();
+    }
+
+    /**
+     * Fetch unread pengaduan baru untuk petugas
+     */
+    public function getUnreadNewPengaduan()
+    {
+        return Pengaduan::where('status', 'Diajukan')
+                        ->where('notified_to_petugas', false)
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+    }
+                        ->count();
+    }
+
     public function index()
     {
         // Data statistik

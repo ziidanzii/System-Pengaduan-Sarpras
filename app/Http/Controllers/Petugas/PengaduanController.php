@@ -88,6 +88,8 @@ class PengaduanController extends Controller
             'status' => $request->status,
             'saran_petugas' => $request->saran_petugas,
             'id_petugas' => $idPetugas,
+            // Set unread flag agar user mendapat notifikasi perubahan
+            'notified_to_user' => false,
         ];
 
         if ($request->hasFile('foto_penyelesaian')) {
@@ -175,6 +177,7 @@ class PengaduanController extends Controller
             'status' => 'Ditolak',
             'id_petugas' => $idPetugas,
             'saran_petugas' => $request->saran_petugas,
+            'notified_to_user' => false,
         ]);
 
         return redirect()->route('petugas.pengaduan.show', $id)

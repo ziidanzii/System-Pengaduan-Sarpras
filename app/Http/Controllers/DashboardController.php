@@ -40,7 +40,13 @@ class DashboardController extends Controller
                     ->orderBy('created_at', 'desc')
                     ->take(5)
                     ->get();
+        // Ambil pengaduan yang belum diberi tahu (unread) untuk ditampilkan sebagai notifikasi
+        $unreadNotifications = Pengaduan::where('id_user', $user->id)
+                ->where('notified_to_user', false)
+                ->orderBy('updated_at', 'desc')
+                ->get();
 
+ 
         // Hitung statistik
         $stats = [
             'total_aduan'    => Pengaduan::where('id_user', $user->id)->count(),
@@ -51,7 +57,7 @@ class DashboardController extends Controller
             'aduan_ditolak'  => Pengaduan::where('id_user', $user->id)->where('status', 'Ditolak')->count(),
         ];
 
-        return view('pengguna.dashboard.index', compact('user', 'aduanList', 'stats'));
+        return view('pengguna.dashboard.index', compact('user', 'aduanList', 'stats', 'unreadNotifications'));
     }
 
     public function admin()

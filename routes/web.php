@@ -109,6 +109,8 @@ Route::middleware(['auth', 'redirect.role:pengguna,user'])
         // Aduan
         Route::get('/aduan/create', [AduanController::class, 'create'])->name('aduan.create');
         Route::post('/aduan', [AduanController::class, 'store'])->name('aduan.store');
+        // Mark-notified (tandai notifikasi telah dibaca)
+        Route::post('/aduan/{id}/mark-notified', [AduanController::class, 'markNotified'])->name('aduan.mark-notified');
         Route::get('/aduan/history', [AduanController::class, 'history'])->name('aduan.history');
 
         // AJAX get items by lokasi
@@ -117,7 +119,13 @@ Route::middleware(['auth', 'redirect.role:pengguna,user'])
 
 /*
 |--------------------------------------------------------------------------
-| TEST ROUTE
+| PETUGAS NOTIFICATION ROUTES
 |--------------------------------------------------------------------------
 */
-Route::get('/test-route', fn() => "✅ ROUTE BERHASIL!");
+Route::middleware(['auth', 'redirect.role:petugas'])
+    ->prefix('petugas')
+    ->name('petugas.')
+    ->group(function () {
+        // Mark pengaduan baru sebagai notified (read)
+        Route::post('/pengaduan/{id}/mark-notified-petugas', [AduanController::class, 'markNotifiedPetugas'])->name('pengaduan.mark-notified');
+    });

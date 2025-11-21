@@ -210,7 +210,21 @@
                 </ul>
 
                 <!-- User menu -->
-                <ul class="navbar-nav align-items-center">
+                <ul class="navbar-nav align-items-center gap-2">
+                    @php
+                        $unreadCount = \App\Models\Pengaduan::where('id_user', Auth::id())
+                            ->where('notified_to_user', false)->count();
+                    @endphp
+                    @if($unreadCount > 0)
+                        <li class="nav-item">
+                            <a href="#notifications" class="nav-link position-relative" data-bs-toggle="collapse">
+                                <i class="fas fa-bell"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ $unreadCount }}
+                                </span>
+                            </a>
+                        </li>
+                    @endif
                     <li class="nav-item dropdown user-dropdown">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <i class="fas fa-user-circle me-2"></i>

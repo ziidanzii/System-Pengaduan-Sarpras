@@ -79,9 +79,10 @@ class PengaduanController extends Controller
             'id_petugas' => 'nullable|exists:petugas,id_petugas',
             'saran_petugas' => 'nullable|string|max:500',
         ]);
-
         $data = [
             'status' => $request->status,
+            // Set flag unread untuk memberi tahu user bahwa status telah berubah
+            'notified_to_user' => false,
         ];
 
         if ($request->filled('id_petugas')) {
