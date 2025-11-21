@@ -216,13 +216,44 @@
                             ->where('notified_to_user', false)->count();
                     @endphp
                     @if($unreadCount > 0)
-                        <li class="nav-item">
-                            <a href="#notifications" class="nav-link position-relative" data-bs-toggle="collapse">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link position-relative" href="#" id="userNotifDropdown" data-bs-toggle="dropdown">
                                 <i class="fas fa-bell"></i>
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                     {{ $unreadCount }}
                                 </span>
                             </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userNotifDropdown" style="min-width: 350px;">
+                                <li><h6 class="dropdown-header">Update Status Aduan</h6></li>
+                                <li><hr class="dropdown-divider"></li>
+                                @php
+                                    $unreadNotifications = \App\Models\Pengaduan::where('id_user', Auth::id())
+                                        ->where('notified_to_user', false)
+                                        ->orderBy('updated_at', 'desc')
+                                        ->limit(5)
+                                        ->get();
+                                @endphp
+                                @forelse($unreadNotifications as $n)
+                                    <li class="px-3 py-2 border-bottom">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <div class="flex-grow-1">
+                                                <strong class="text-dark">{{ $n->nama_pengaduan }}</strong>
+                                                <div class="small text-muted">Status: <span class="badge bg-info">{{ $n->status }}</span></div>
+                                                <div class="small text-muted">{{ $n->lokasi }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <a href="{{ route('user.aduan.history') }}" class="btn btn-sm btn-primary">Lihat</a>
+                                            <form method="POST" action="{{ route('user.aduan.mark-notified', $n->id_pengaduan) }}" style="display: inline;">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary">Mark</button>
+                                            </form>
+                                        </div>
+                                    </li>
+                                @empty
+                                    <li class="px-3 py-2 text-center text-muted">Tidak ada notifikasi baru</li>
+                                @endforelse
+                            </ul>
                         </li>
                     @endif
                     <li class="nav-item dropdown user-dropdown">

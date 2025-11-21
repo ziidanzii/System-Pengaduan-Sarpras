@@ -12,40 +12,11 @@
                     <p class="text-muted mb-0">Apa yang ingin Anda lakukan hari ini?</p>
                 </div>
                 <div class="col-md-4 text-end">
-                    <div class="d-flex justify-content-end align-items-center gap-3">
-                        @if(!empty($unreadNotifications) && $unreadNotifications->count() > 0)
-                            <a href="#notifications" class="btn btn-sm btn-outline-danger" data-bs-toggle="collapse">Notifikasi ({{ $unreadNotifications->count() }})</a>
-                        @endif
-                        <span class="badge bg-primary fs-6 px-3 py-2">{{ ucfirst($user->role) }}</span>
-                    </div>
-            </div>
-        </div>
-    </div>
-    @if(!empty($unreadNotifications) && $unreadNotifications->count() > 0)
-        <div class="collapse" id="notifications">
-            <div class="card card-custom mb-4">
-                <div class="card-body">
-                    <h6 class="mb-3">Notifikasi Perubahan Status</h6>
-                    <ul class="list-group">
-                        @foreach($unreadNotifications as $n)
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                                <div>
-                                    <strong>{{ $n->nama_pengaduan }}</strong>
-                                    <div class="small text-muted">Status: {{ $n->status }} • {{ $n->lokasi }}</div>
-                                </div>
-                                <div class="ms-3">
-                                    <form method="POST" action="{{ route('user.aduan.mark-notified', $n->id_pengaduan) }}">
-                                        @csrf
-                                        <button type="submit" class="btn btn-sm btn-outline-primary">Tandai dibaca</button>
-                                    </form>
-                                </div>
-                            </li>
-                        @endforeach
-                    </ul>
+                    <span class="badge bg-primary fs-6 px-3 py-2">{{ ucfirst($user->role) }}</span>
                 </div>
             </div>
         </div>
-    @endif
+    </div>
 
     <div class="row mb-4">
         {{-- Profil Saya --}}
