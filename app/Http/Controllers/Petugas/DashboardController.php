@@ -27,8 +27,6 @@ class DashboardController extends Controller
                         ->orderBy('created_at', 'desc')
                         ->get();
     }
-                        ->count();
-    }
 
     public function index()
     {
